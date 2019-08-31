@@ -1,0 +1,1 @@
+mvn exec:java@commits -pl experiments -Dexec.args="-url=${1} -head=${2} -count=${3}"

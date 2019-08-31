@@ -1,0 +1,1 @@
+mvn exec:java@benchmark -pl experiments -Dexec.args="-id=${1}"
