@@ -75,15 +75,16 @@ abstract class SetArtifactHandler extends ArtifactHandler<Set<String>> {
 
   @Override
   protected Set<String> readArtifact(Path artifactPath) throws IOException {
-    return Files.lines(artifactPath)
-            .flatMap(x -> Arrays.stream(x.split(",")))
-            .map(String::trim)
-            .peek(x -> {
-              if (isCorrupted(x)) {
-                throw new IllegalStateException(x);
-              }
-            }).filter(x -> !x.isEmpty())
-            .collect(ImmutableSet.toImmutableSet());
+    try (Stream<String> lines = Files.lines(artifactPath)) {
+      return lines.flatMap(x -> Arrays.stream(x.split(",")))
+              .map(String::trim)
+              .peek(x -> {
+                if (isCorrupted(x)) {
+                  throw new IllegalStateException(x);
+                }
+              }).filter(x -> !x.isEmpty())
+              .collect(ImmutableSet.toImmutableSet());
+    }
   }
 
   static class ClassSetArtifactHandler extends SetArtifactHandler {
