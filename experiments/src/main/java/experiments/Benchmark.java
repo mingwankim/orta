@@ -162,7 +162,7 @@ public class Benchmark {
 
     @Override
     boolean isAllConfident() {
-      return opt.isConfident("singleRTA") && opt.isConfident("singleOnline");
+      return opt.isConfident("singleRTA") && opt.isConfident("singleOffline");
     }
 
     @Override
@@ -182,13 +182,13 @@ public class Benchmark {
         stmt.execute("update edges set single_selected=" + selectInsert + ", single_affected=" + affectInsert + " where id=" + opt.edgeId);
       }
 
-      opt.resetBenchmark("singleOnline", "singleRTA");
+      opt.resetBenchmark("singleOffline", "singleRTA");
     }
 
     @Override
     protected void runBenchmark() throws MavenHelper.MavenException, IOException, GitHelper.GitHelperException, SQLException {
       try (MavenHelper mvn = opt.checkoutHead(MavenPluginType.SINGLE_AEC)) {
-        while (!opt.isConfident("singleOnline")) {
+        while (!opt.isConfident("singleOffline")) {
           int[] times = mvn.profileTest(this.opt.headRoot, this.opt.tailRoot, false);
           if (times == null) {
             continue;
@@ -196,7 +196,7 @@ public class Benchmark {
           if (isInconsistentResult()) {
             return;
           }
-          opt.add("singleOnline", times[1] + times[0]);
+          opt.add("singleOffline", times[1] + times[0]);
         }
 
         while (!opt.isConfident("singleRTA")) {
@@ -245,7 +245,7 @@ public class Benchmark {
 
     @Override
     boolean isAllConfident() {
-      return opt.isConfident("sepRTA") && opt.isConfident("sepORTA") && opt.isConfident("sepOnline");
+      return opt.isConfident("sepRTA") && opt.isConfident("sepORTA") && opt.isConfident("sepOffline");
     }
 
     @Override
@@ -270,13 +270,13 @@ public class Benchmark {
         stmt.execute("update edges set sep_selected=" + selectInsert + ", sep_affected=" + affectInsert + " where id=" + opt.edgeId);
       }
 
-      opt.resetBenchmark("sepOnline", "sepRTA", "sepORTA");
+      opt.resetBenchmark("sepOffline", "sepRTA", "sepORTA");
     }
 
     @Override
     protected void runBenchmark() throws MavenHelper.MavenException, IOException, GitHelper.GitHelperException, SQLException {
       try (MavenHelper mvn = opt.checkoutHead(MavenPluginType.SEPARATE_RTA)) {
-        while (!opt.isConfident("sepOnline")) {
+        while (!opt.isConfident("sepOffline")) {
           int[] times = mvn.profileTest(this.opt.headRoot, this.opt.tailRoot, false);
           if (times == null) {
             continue;
@@ -285,7 +285,7 @@ public class Benchmark {
             return;
           }
 
-          opt.add("sepOnline", times[1] + times[0]);
+          opt.add("sepOffline", times[1] + times[0]);
         }
 
         while (!opt.isConfident("sepRTA")) {
